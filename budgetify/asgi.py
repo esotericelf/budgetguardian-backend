@@ -8,9 +8,16 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
 import os
+import sys
 
-from django.core.asgi import get_asgi_application
+# Add the project directory to the sys.path
+project_home = '/home/esotericelf/budgetguardian-backend'
+if project_home not in sys.path:
+    sys.path = [project_home] + sys.path
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'budgetify.settings')
+# Set the Django settings module
+os.environ['DJANGO_SETTINGS_MODULE'] = 'budgetify.settings'
 
-application = get_asgi_application()
+# Import Django's WSGI handler to serve the application
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
