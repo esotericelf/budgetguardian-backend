@@ -1,11 +1,15 @@
 # budgetify/views.py
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .firebase import db
 from datetime import datetime
+# budgetify/views.py
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_user_data(request, uid):
     try:
         user_ref = db.collection('users').document(uid)
@@ -19,6 +23,7 @@ def get_user_data(request, uid):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_category_sums(request, uid):
     try:
         user_ref = db.collection('users').document(uid)
@@ -45,6 +50,7 @@ def get_category_sums(request, uid):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_category_sums_by_date_range(request, uid):
     try:
         start_date_str = request.query_params.get('start_date')
@@ -79,4 +85,4 @@ def get_category_sums_by_date_range(request, uid):
 
         return Response({'category_sums': category_sums}, status=status.HTTP_200_OK)
     except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)x
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

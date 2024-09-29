@@ -16,10 +16,18 @@ Including another URLconf
 """
 # budgetify/urls.py
 from django.urls import path
-from .views import get_user_data, get_category_sums
+from .views import get_user_data, get_category_sums, get_category_sums_by_date_range
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Welcome to Budget Guardian!")
 
 urlpatterns = [
-    # ... other url patterns ...
-    path('api/user/<str:uid>/', get_user_data, name='get_user_data'),
-    path('api/user/<str:uid>/category-sums/', get_category_sums, name='get_category_sums'),
+    path('', home, name='home'),  # Root URL pattern
+    path('user-data/', get_user_data, name='get_user_data'),
+    path('category-sums/', get_category_sums, name='get_category_sums'),
+    path('category-sums-by-date/', get_category_sums_by_date_range, name='get_category_sums_by_date_range'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
